@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hello D3!!</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://d3js.org/d3.v4.js"></script>
+</head>
+<body>
+	<div id="main">
+	</div>
+</body>
+<script>
+	function drawBarChart(data, target, x_axis="X", y_axis="Y", title="Bar Chart"){
+		//var svg = $("<d3.ns.prefix.svg>");	//make a svg area
+		
+		var svg_height = 240;
+		var scale = 30;
+
+		//make a svg in the target element
+		var svg = d3.select(target)
+			.append("svg")
+			.attr("height", svg_height);
+
+		//draw a bar chart in svg element
+		var bar_elements = svg.selectAll("rect")
+			.data(data)
+			.enter()
+			.append("rect")
+			.attr("height", function(d, i){
+				return d.stack * scale;
+			})
+			.attr("width", 20)
+			.attr("x", function(d,i){
+				return i * 25;
+			})
+			.attr("y", function(d, i){
+				return svg_height - d.stack * scale;
+			});
+
+		//return svg;
+	}
+
+	d3.json("./data/2017-4.json", function(data){
+		var data_set = [];
+		for(var i=0; i<data.length; i++){
+			data_set.push(data[i]);
+		}
+
+		drawBarChart(data, "#main","Date", "Stack", "4月 Stack");
+	});
+	
+</script>
+</html>
